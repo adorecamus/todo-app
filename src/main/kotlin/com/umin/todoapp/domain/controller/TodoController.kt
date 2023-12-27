@@ -43,7 +43,9 @@ class TodoController(
 
     @PutMapping("/{todoId}")
     fun updateTodo(@PathVariable todoId: Long, @RequestBody request: TodoRequest): ResponseEntity<TodoResponse> {
-        TODO()
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(todoService.updateTodo(todoId, request))
     }
 
     @DeleteMapping("/{todoId}")

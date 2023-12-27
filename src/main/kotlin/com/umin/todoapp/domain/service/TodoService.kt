@@ -8,12 +8,14 @@ import com.umin.todoapp.domain.model.toResponse
 import com.umin.todoapp.domain.repository.TodoRepository
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class TodoService(
     private val todoRepository: TodoRepository
 ) {
 
+    @Transactional
     fun createTodo(request: TodoRequest): TodoResponse {
         return todoRepository.save(
             Todo(
@@ -33,8 +35,16 @@ class TodoService(
         return todo.toResponse()
     }
 
+    @Transactional
     fun updateTodo(todoId: Long, request: TodoRequest): TodoResponse {
-        TODO()
+        val todo = todoRepository.findByIdOrNull(todoId) ?: throw ModelNotFoundException("Todo", todoId)
+
+        val (title, description, writer) = request
+        todo.title = title
+        todo.description = description
+        todo.writer = writer
+
+        return todoRepository.save(todo).toResponse()
     }
 
     fun deleteTodo(todoId: Long) {
