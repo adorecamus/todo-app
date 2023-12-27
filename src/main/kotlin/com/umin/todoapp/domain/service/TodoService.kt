@@ -23,7 +23,7 @@ class TodoService(
     }
 
     fun getTodoList(): List<TodoResponse> {
-        TODO()
+        return todoRepository.findAll().map { it.toResponse() }
     }
 
     fun getTodoById(todoId: Long): TodoResponse {
