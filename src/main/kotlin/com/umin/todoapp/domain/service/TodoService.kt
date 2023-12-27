@@ -47,7 +47,9 @@ class TodoService(
         return todoRepository.save(todo).toResponse()
     }
 
+    @Transactional
     fun deleteTodo(todoId: Long) {
-        TODO()
+        val todo = todoRepository.findByIdOrNull(todoId) ?: throw ModelNotFoundException("Todo", todoId)
+        todoRepository.delete(todo)
     }
 }
