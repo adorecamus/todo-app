@@ -2,7 +2,7 @@ package com.umin.todoapp.domain.model
 
 import com.umin.todoapp.domain.dto.TodoResponse
 import jakarta.persistence.*
-import java.time.LocalDateTime
+import java.time.OffsetDateTime
 
 @Entity
 @Table(name = "todo")
@@ -14,7 +14,7 @@ class Todo(
     var description: String? = null,
 
     @Column(name = "created_at")
-    val createdAt: LocalDateTime = LocalDateTime.now(),
+    val createdAt: OffsetDateTime = OffsetDateTime.now(),
 
     @Column(name = "writer")
     var writer: String
