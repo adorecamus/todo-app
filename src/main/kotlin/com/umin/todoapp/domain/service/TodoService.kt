@@ -27,7 +27,7 @@ class TodoService(
     }
 
     fun getTodoList(): List<TodoResponse> {
-        return todoRepository.findAll().map { it.toResponse() }
+        return todoRepository.findAllByOrderByCreatedAtDesc().map { it.toResponse() }
     }
 
     fun getTodoById(todoId: Long): TodoResponse {
