@@ -1,11 +1,11 @@
-package com.umin.todoapp.domain.service
+package com.umin.todoapp.domain.todo.service
 
-import com.umin.todoapp.domain.dto.TodoRequest
-import com.umin.todoapp.domain.dto.TodoResponse
+import com.umin.todoapp.domain.todo.dto.TodoRequest
+import com.umin.todoapp.domain.todo.dto.TodoResponse
 import com.umin.todoapp.domain.exception.ModelNotFoundException
-import com.umin.todoapp.domain.model.Todo
-import com.umin.todoapp.domain.model.toResponse
-import com.umin.todoapp.domain.repository.TodoRepository
+import com.umin.todoapp.domain.todo.model.Todo
+import com.umin.todoapp.domain.todo.model.toResponse
+import com.umin.todoapp.domain.todo.repository.TodoRepository
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional

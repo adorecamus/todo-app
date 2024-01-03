@@ -1,4 +1,4 @@
-package com.umin.todoapp.domain.dto
+package com.umin.todoapp.domain.todo.dto
 
 data class TodoRequest(
     val title: String,

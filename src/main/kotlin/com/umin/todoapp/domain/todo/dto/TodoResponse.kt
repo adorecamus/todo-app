@@ -1,4 +1,4 @@
-package com.umin.todoapp.domain.dto
+package com.umin.todoapp.domain.todo.dto
 
 import java.time.OffsetDateTime
 

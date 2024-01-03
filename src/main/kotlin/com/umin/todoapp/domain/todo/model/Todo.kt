@@ -1,6 +1,6 @@
-package com.umin.todoapp.domain.model
+package com.umin.todoapp.domain.todo.model
 
-import com.umin.todoapp.domain.dto.TodoResponse
+import com.umin.todoapp.domain.todo.dto.TodoResponse
 import jakarta.persistence.*
 import java.time.OffsetDateTime
 

@@ -1,8 +1,8 @@
-package com.umin.todoapp.domain.controller
+package com.umin.todoapp.domain.todo.controller
 
-import com.umin.todoapp.domain.dto.TodoRequest
-import com.umin.todoapp.domain.dto.TodoResponse
-import com.umin.todoapp.domain.service.TodoService
+import com.umin.todoapp.domain.todo.dto.TodoRequest
+import com.umin.todoapp.domain.todo.dto.TodoResponse
+import com.umin.todoapp.domain.todo.service.TodoService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
