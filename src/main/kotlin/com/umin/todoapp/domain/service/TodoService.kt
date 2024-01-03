@@ -50,4 +50,23 @@ class TodoService(
         val todo = todoRepository.findByIdOrNull(todoId) ?: throw ModelNotFoundException("Todo", todoId)
         todoRepository.delete(todo)
     }
+
+    @Transactional
+    fun updateTodoCompletionStatus(todoId: Long, statusRequest: Boolean): TodoResponse {
+        val todo = todoRepository.findByIdOrNull(todoId) ?: throw ModelNotFoundException("Todo", todoId)
+
+        if (todo.compareStatusWith(statusRequest)) {
+            throw IllegalStateException("Completion Status is alreay $statusRequest. todoId: $todoId")
+        }
+
+        when (statusRequest) {
+            true -> {
+                todo.complete()
+            }
+            false -> {
+                todo.setInProgress()
+            }
+        }
+        return todo.toResponse()
+    }
 }
