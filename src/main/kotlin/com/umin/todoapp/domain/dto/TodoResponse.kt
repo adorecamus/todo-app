@@ -7,5 +7,6 @@ data class TodoResponse(
     val title: String,
     val description: String?,
     val createdAt: OffsetDateTime,
-    val writer: String
+    val writer: String,
+    val completionStatus: Boolean
 )

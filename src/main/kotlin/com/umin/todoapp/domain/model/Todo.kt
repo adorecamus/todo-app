@@ -17,11 +17,26 @@ class Todo(
     val createdAt: OffsetDateTime = OffsetDateTime.now(),
 
     @Column(name = "writer")
-    var writer: String
+    var writer: String,
+
+    @Column(name = "completion_status")
+    var completionStatus: Boolean = false
 ) {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null
+
+    fun compareStatusWith(statusRequest: Boolean): Boolean {
+        return completionStatus == statusRequest
+    }
+
+    fun complete() {
+        completionStatus = true
+    }
+
+    fun setInProgress() {
+        completionStatus = false
+    }
 }
 
 fun Todo.toResponse(): TodoResponse {
@@ -30,6 +45,7 @@ fun Todo.toResponse(): TodoResponse {
         title = title,
         description = description,
         createdAt = createdAt,
-        writer = writer
+        writer = writer,
+        completionStatus = completionStatus
     )
 }
