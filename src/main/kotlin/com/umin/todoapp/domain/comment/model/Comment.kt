@@ -30,6 +30,10 @@ class Comment(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null
+
+    fun checkIfWriter(writer: String, password: String): Boolean {
+        return writer == this.writer && password == this.password
+    }
 }
 
 fun Comment.toResponse(): CommentResponse {

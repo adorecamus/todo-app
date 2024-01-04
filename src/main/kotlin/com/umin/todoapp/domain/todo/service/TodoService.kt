@@ -18,7 +18,8 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 class TodoService(
-    private val todoRepository: TodoRepository
+    private val todoRepository: TodoRepository,
+    private val commentRepository: CommentRepository
 ) {
 
     fun createTodo(request: TodoRequest): TodoResponse {
@@ -92,7 +93,15 @@ class TodoService(
     }
 
     fun updateComment(todoId: Long, commentId: Long, request: CommentRequest): CommentResponse {
-        TODO()
+        val comment = commentRepository.findByTodoIdAndId(todoId, commentId) ?: throw ModelNotFoundException("Comment", commentId)
+
+        if (!comment.checkIfWriter(request.writer, request.password)) {
+            throw IllegalArgumentException("Writer name or password does not match")
+        }
+
+        comment.content = request.content
+
+        return commentRepository.save(comment).toResponse()
     }
 
     fun deleteComment(todoId: Long, commentId: Long, request: DeleteCommentRequest): CommentResponse {
