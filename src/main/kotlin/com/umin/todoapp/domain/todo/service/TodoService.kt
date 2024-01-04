@@ -108,6 +108,10 @@ class TodoService(
         val todo = todoRepository.findByIdOrNull(todoId) ?: throw ModelNotFoundException("Todo", todoId)
         val comment = commentRepository.findByIdOrNull(commentId) ?: throw ModelNotFoundException("Comment", commentId)
 
+        if (!comment.checkIfWriter(request.writer, request.password)) {
+            throw IllegalArgumentException("Writer name or password does not match")
+        }
+
         todo.removeComment(comment)
 
         todoRepository.save(todo)
