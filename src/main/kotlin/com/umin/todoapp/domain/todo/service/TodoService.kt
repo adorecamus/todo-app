@@ -34,16 +34,17 @@ class TodoService(
         ).toResponse()
     }
 
-    fun getTodoList(sort: String): List<TodoResponse> {
-        return when (sort) {
+    fun getTodoList(sort: String?, writer: String?): List<TodoResponse> {
+        val todoList = when (sort) {
             "asc" -> {
-                todoRepository.findAllByOrderByCreatedAt().map { it.toResponse() }
+                todoRepository.findAllByOrderByCreatedAt()
             }
             // 기본 정렬 - 작성일 기준 내림차순
             else -> {
-                todoRepository.findAllByOrderByCreatedAtDesc().map { it.toResponse() }
+                todoRepository.findAllByOrderByCreatedAtDesc()
             }
-        }
+        }.map { it.toResponse() }
+        return writer?.let { todoList.filter { todo -> todo.writer == it } }?: todoList
     }
 
     fun getTodoById(todoId: Long): TodoWithCommentsResponse {
@@ -80,6 +81,7 @@ class TodoService(
             true -> {
                 todo.complete()
             }
+
             false -> {
                 todo.setInProgress()
             }
@@ -103,7 +105,8 @@ class TodoService(
     }
 
     fun updateComment(todoId: Long, commentId: Long, request: CommentRequest): CommentResponse {
-        val comment = commentRepository.findByTodoIdAndId(todoId, commentId) ?: throw ModelNotFoundException("Comment", commentId)
+        val comment =
+            commentRepository.findByTodoIdAndId(todoId, commentId) ?: throw ModelNotFoundException("Comment", commentId)
 
         if (!comment.checkIfWriter(request.writer, request.password)) {
             throw IllegalArgumentException("Writer name or password does not match")
