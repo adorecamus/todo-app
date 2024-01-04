@@ -34,8 +34,16 @@ class TodoService(
         ).toResponse()
     }
 
-    fun getTodoList(): List<TodoResponse> {
-        return todoRepository.findAllByOrderByCreatedAtDesc().map { it.toResponse() }
+    fun getTodoList(sort: String): List<TodoResponse> {
+        return when (sort) {
+            "asc" -> {
+                todoRepository.findAllByOrderByCreatedAt().map { it.toResponse() }
+            }
+            // 기본 정렬 - 작성일 기준 내림차순
+            else -> {
+                todoRepository.findAllByOrderByCreatedAtDesc().map { it.toResponse() }
+            }
+        }
     }
 
     fun getTodoById(todoId: Long): TodoWithCommentsResponse {

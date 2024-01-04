@@ -31,10 +31,10 @@ class TodoController(
     }
 
     @GetMapping
-    fun getTodoList(): ResponseEntity<List<TodoResponse>> {
+    fun getTodoList(@RequestParam sort: String): ResponseEntity<List<TodoResponse>> {
         return ResponseEntity
             .status(HttpStatus.OK)
-            .body(todoService.getTodoList())
+            .body(todoService.getTodoList(sort))
     }
 
     @GetMapping("/{todoId}")
