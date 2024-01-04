@@ -25,6 +25,8 @@ class TodoService(
 ) {
 
     fun createTodo(request: TodoRequest): TodoResponse {
+        validateInput(request.title, request.description)
+
         return todoRepository.save(
             Todo(
                 title = request.title,
@@ -128,6 +130,15 @@ class TodoService(
         todo.removeComment(comment)
 
         todoRepository.save(todo)
+    }
+
+    private fun validateInput(title: String, description: String) {
+        if (title.isEmpty() || title.length > 200) {
+            throw IllegalArgumentException("Title must be between 1 and 200 characters.")
+        }
+        if (description.isEmpty() || description.length > 1000) {
+            throw IllegalArgumentException("Description must be between 1 and 1000 characters.")
+        }
     }
 
 }

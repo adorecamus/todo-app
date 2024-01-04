@@ -15,7 +15,7 @@ class Todo(
     var title: String,
 
     @Column(name = "description")
-    var description: String? = null,
+    var description: String,
 
     @Column(name = "created_at")
     val createdAt: OffsetDateTime = OffsetDateTime.now(),
