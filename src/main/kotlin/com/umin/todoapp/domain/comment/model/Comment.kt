@@ -41,7 +41,6 @@ fun Comment.toResponse(): CommentResponse {
         id = id!!,
         content = content,
         writer = writer,
-        createdAt = createdAt,
-        todo = todo.toResponse()
+        createdAt = createdAt
     )
 }
