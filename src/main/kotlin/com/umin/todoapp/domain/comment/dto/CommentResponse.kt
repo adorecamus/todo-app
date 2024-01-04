@@ -5,9 +5,8 @@ import java.time.OffsetDateTime
 
 data class CommentResponse(
     val id: Long,
-    var content: String,
-    var writer: String,
-    var password: String,
+    val content: String,
+    val writer: String,
     val createdAt: OffsetDateTime,
     val todo: TodoResponse
 )
