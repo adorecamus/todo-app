@@ -3,6 +3,8 @@ package com.umin.todoapp.domain.comment.controller
 import com.umin.todoapp.domain.comment.dto.CommentRequest
 import com.umin.todoapp.domain.comment.dto.CommentResponse
 import com.umin.todoapp.domain.comment.dto.DeleteCommentRequest
+import com.umin.todoapp.domain.comment.service.CommentService
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -15,14 +17,18 @@ import org.springframework.web.bind.annotation.RestController
 
 @RequestMapping("/api/todos/{todoId}/comments")
 @RestController
-class CommentController {
+class CommentController(
+    private val commentService: CommentService
+) {
 
     @PostMapping
     fun createComment(
         @PathVariable todoId: Long,
         @RequestBody request: CommentRequest
     ): ResponseEntity<CommentResponse> {
-        TODO()
+        return ResponseEntity
+            .status(HttpStatus.CREATED)
+            .body(commentService.createComment(todoId, request))
     }
 
     @PutMapping("/{commentId}")
@@ -31,7 +37,9 @@ class CommentController {
         @PathVariable commentId: Long,
         @RequestBody request: CommentRequest
     ): ResponseEntity<CommentResponse> {
-        TODO()
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(commentService.updateComment(todoId, commentId, request))
     }
 
     @DeleteMapping("/{commentId}")
@@ -40,7 +48,10 @@ class CommentController {
         @PathVariable commentId: Long,
         @RequestBody request: DeleteCommentRequest
     ): ResponseEntity<CommentResponse> {
-        TODO()
+        commentService.deleteComment(todoId, commentId, request)
+        return ResponseEntity
+            .status(HttpStatus.NO_CONTENT)
+            .build()
     }
 
 }
