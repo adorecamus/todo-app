@@ -9,8 +9,10 @@ import com.umin.todoapp.domain.comment.repository.CommentRepository
 import com.umin.todoapp.domain.todo.dto.TodoRequest
 import com.umin.todoapp.domain.todo.dto.TodoResponse
 import com.umin.todoapp.domain.exception.ModelNotFoundException
+import com.umin.todoapp.domain.todo.dto.TodoWithCommentsResponse
 import com.umin.todoapp.domain.todo.model.Todo
 import com.umin.todoapp.domain.todo.model.toResponse
+import com.umin.todoapp.domain.todo.model.withCommentsToResponse
 import com.umin.todoapp.domain.todo.repository.TodoRepository
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
@@ -36,9 +38,9 @@ class TodoService(
         return todoRepository.findAllByOrderByCreatedAtDesc().map { it.toResponse() }
     }
 
-    fun getTodoById(todoId: Long): TodoResponse {
+    fun getTodoById(todoId: Long): TodoWithCommentsResponse {
         val todo = todoRepository.findByIdOrNull(todoId) ?: throw ModelNotFoundException("Todo", todoId)
-        return todo.toResponse()
+        return todo.withCommentsToResponse()
     }
 
     @Transactional

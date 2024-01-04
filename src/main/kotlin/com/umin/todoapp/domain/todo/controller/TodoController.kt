@@ -2,6 +2,7 @@ package com.umin.todoapp.domain.todo.controller
 
 import com.umin.todoapp.domain.todo.dto.TodoRequest
 import com.umin.todoapp.domain.todo.dto.TodoResponse
+import com.umin.todoapp.domain.todo.dto.TodoWithCommentsResponse
 import com.umin.todoapp.domain.todo.service.TodoService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -37,7 +38,7 @@ class TodoController(
     }
 
     @GetMapping("/{todoId}")
-    fun getTodo(@PathVariable todoId: Long): ResponseEntity<TodoResponse> {
+    fun getTodo(@PathVariable todoId: Long): ResponseEntity<TodoWithCommentsResponse> {
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(todoService.getTodoById(todoId))
