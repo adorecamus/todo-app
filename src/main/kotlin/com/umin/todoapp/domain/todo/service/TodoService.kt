@@ -104,8 +104,13 @@ class TodoService(
         return commentRepository.save(comment).toResponse()
     }
 
-    fun deleteComment(todoId: Long, commentId: Long, request: DeleteCommentRequest): CommentResponse {
-        TODO()
+    fun deleteComment(todoId: Long, commentId: Long, request: DeleteCommentRequest) {
+        val todo = todoRepository.findByIdOrNull(todoId) ?: throw ModelNotFoundException("Todo", todoId)
+        val comment = commentRepository.findByIdOrNull(commentId) ?: throw ModelNotFoundException("Comment", commentId)
+
+        todo.removeComment(comment)
+
+        todoRepository.save(todo)
     }
 
 }
