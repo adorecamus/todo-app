@@ -43,6 +43,10 @@ class Todo(
     fun setInProgress() {
         completionStatus = false
     }
+
+    fun addComment(comment: Comment) {
+        comments.add(comment)
+    }
 }
 
 fun Todo.toResponse(): TodoResponse {

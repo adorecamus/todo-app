@@ -1,5 +1,11 @@
 package com.umin.todoapp.domain.todo.service
 
+import com.umin.todoapp.domain.comment.dto.CommentRequest
+import com.umin.todoapp.domain.comment.dto.CommentResponse
+import com.umin.todoapp.domain.comment.dto.DeleteCommentRequest
+import com.umin.todoapp.domain.comment.model.Comment
+import com.umin.todoapp.domain.comment.model.toResponse
+import com.umin.todoapp.domain.comment.repository.CommentRepository
 import com.umin.todoapp.domain.todo.dto.TodoRequest
 import com.umin.todoapp.domain.todo.dto.TodoResponse
 import com.umin.todoapp.domain.exception.ModelNotFoundException
@@ -69,4 +75,28 @@ class TodoService(
         }
         return todo.toResponse()
     }
+
+    fun createComment(todoId: Long, request: CommentRequest): CommentResponse {
+        val todo = todoRepository.findByIdOrNull(todoId) ?: throw ModelNotFoundException("Todo", todoId)
+
+        val comment = Comment(
+            content = request.content,
+            writer = request.writer,
+            password = request.password,
+            todo = todo
+        )
+        todo.addComment(comment)
+        todoRepository.save(todo)
+
+        return comment.toResponse()
+    }
+
+    fun updateComment(todoId: Long, commentId: Long, request: CommentRequest): CommentResponse {
+        TODO()
+    }
+
+    fun deleteComment(todoId: Long, commentId: Long, request: DeleteCommentRequest): CommentResponse {
+        TODO()
+    }
+
 }

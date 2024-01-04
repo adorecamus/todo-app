@@ -3,11 +3,10 @@ package com.umin.todoapp.domain.comment.controller
 import com.umin.todoapp.domain.comment.dto.CommentRequest
 import com.umin.todoapp.domain.comment.dto.CommentResponse
 import com.umin.todoapp.domain.comment.dto.DeleteCommentRequest
-import com.umin.todoapp.domain.comment.service.CommentService
+import com.umin.todoapp.domain.todo.service.TodoService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
-import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
@@ -18,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/api/todos/{todoId}/comments")
 @RestController
 class CommentController(
-    private val commentService: CommentService
+    private val todoService: TodoService
 ) {
 
     @PostMapping
@@ -28,7 +27,7 @@ class CommentController(
     ): ResponseEntity<CommentResponse> {
         return ResponseEntity
             .status(HttpStatus.CREATED)
-            .body(commentService.createComment(todoId, request))
+            .body(todoService.createComment(todoId, request))
     }
 
     @PutMapping("/{commentId}")
@@ -39,7 +38,7 @@ class CommentController(
     ): ResponseEntity<CommentResponse> {
         return ResponseEntity
             .status(HttpStatus.OK)
-            .body(commentService.updateComment(todoId, commentId, request))
+            .body(todoService.updateComment(todoId, commentId, request))
     }
 
     @DeleteMapping("/{commentId}")
@@ -48,7 +47,7 @@ class CommentController(
         @PathVariable commentId: Long,
         @RequestBody request: DeleteCommentRequest
     ): ResponseEntity<CommentResponse> {
-        commentService.deleteComment(todoId, commentId, request)
+        todoService.deleteComment(todoId, commentId, request)
         return ResponseEntity
             .status(HttpStatus.NO_CONTENT)
             .build()
