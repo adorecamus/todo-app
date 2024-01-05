@@ -56,6 +56,8 @@ class TodoService(
 
     @Transactional
     fun updateTodo(todoId: Long, request: TodoRequest): TodoResponse {
+        validateInput(request.title, request.description)
+
         val todo = todoRepository.findByIdOrNull(todoId) ?: throw ModelNotFoundException("Todo", todoId)
 
         val (title, description, writer) = request
