@@ -21,8 +21,6 @@ class TodoServiceImpl(
 ): TodoService {
 
     override fun createTodo(request: TodoRequest): TodoResponse {
-        validateInput(request.title, request.description)
-
         return TodoResponse.from(
             todoRepository.save(request.to()))
     }
@@ -45,9 +43,8 @@ class TodoServiceImpl(
         return TodoWithCommentsResponse.from(todo)
     }
 
+    @Transactional
     override fun updateTodo(todoId: Long, request: TodoRequest): TodoResponse {
-        validateInput(request.title, request.description)
-
         val todo = todoRepository.findByIdOrNull(todoId) ?: throw ModelNotFoundException("Todo", todoId)
 
         val (title, description, writer) = request
@@ -55,7 +52,7 @@ class TodoServiceImpl(
         todo.description = description
         todo.writer = writer
 
-        return TodoResponse.from(todoRepository.save(todo))
+        return TodoResponse.from(todo)
     }
 
     override fun deleteTodo(todoId: Long) {
@@ -98,6 +95,7 @@ class TodoServiceImpl(
         return CommentResponse.from(comment)
     }
 
+    @Transactional
     override fun updateComment(todoId: Long, commentId: Long, request: CommentRequest): CommentResponse {
         val comment =
             commentRepository.findByTodoIdAndId(todoId, commentId) ?: throw ModelNotFoundException("Comment", commentId)
@@ -108,7 +106,7 @@ class TodoServiceImpl(
 
         comment.content = request.content
 
-        return CommentResponse.from(commentRepository.save(comment))
+        return CommentResponse.from(comment)
     }
 
     override fun deleteComment(todoId: Long, commentId: Long, request: DeleteCommentRequest) {
@@ -122,15 +120,6 @@ class TodoServiceImpl(
         todo.removeComment(comment)
 
         todoRepository.save(todo)
-    }
-
-    private fun validateInput(title: String, description: String) {
-        if (title.isEmpty() || title.length > 200) {
-            throw IllegalArgumentException("Title must be between 1 and 200 characters.")
-        }
-        if (description.isEmpty() || description.length > 1000) {
-            throw IllegalArgumentException("Description must be between 1 and 1000 characters.")
-        }
     }
 
 }
