@@ -1,9 +1,6 @@
 package com.umin.todoapp.domain.todo.model
 
 import com.umin.todoapp.domain.comment.model.Comment
-import com.umin.todoapp.domain.comment.model.toResponse
-import com.umin.todoapp.domain.todo.dto.TodoResponse
-import com.umin.todoapp.domain.todo.dto.TodoWithCommentsResponse
 import jakarta.persistence.*
 import java.time.OffsetDateTime
 
@@ -53,27 +50,4 @@ class Todo(
     fun removeComment(comment: Comment) {
         comments.remove(comment)
     }
-}
-
-fun Todo.toResponse(): TodoResponse {
-    return TodoResponse(
-        id = id!!,
-        title = title,
-        description = description,
-        createdAt = createdAt,
-        writer = writer,
-        completionStatus = completionStatus
-    )
-}
-
-fun Todo.withCommentsToResponse(): TodoWithCommentsResponse {
-    return return TodoWithCommentsResponse(
-        id = id!!,
-        title = title,
-        description = description,
-        createdAt = createdAt,
-        writer = writer,
-        completionStatus = completionStatus,
-        comments = comments.map { it.toResponse() }
-    )
 }

@@ -1,8 +1,6 @@
 package com.umin.todoapp.domain.comment.model
 
-import com.umin.todoapp.domain.comment.dto.CommentResponse
 import com.umin.todoapp.domain.todo.model.Todo
-import com.umin.todoapp.domain.todo.model.toResponse
 import jakarta.persistence.*
 import java.time.OffsetDateTime
 
@@ -34,13 +32,4 @@ class Comment(
     fun checkIfWriter(writer: String, password: String): Boolean {
         return writer == this.writer && password == this.password
     }
-}
-
-fun Comment.toResponse(): CommentResponse {
-    return CommentResponse(
-        id = id!!,
-        content = content,
-        writer = writer,
-        createdAt = createdAt
-    )
 }

@@ -4,15 +4,11 @@ import com.umin.todoapp.domain.comment.dto.CommentRequest
 import com.umin.todoapp.domain.comment.dto.CommentResponse
 import com.umin.todoapp.domain.comment.dto.DeleteCommentRequest
 import com.umin.todoapp.domain.comment.model.Comment
-import com.umin.todoapp.domain.comment.model.toResponse
 import com.umin.todoapp.domain.comment.repository.CommentRepository
 import com.umin.todoapp.domain.todo.dto.TodoRequest
 import com.umin.todoapp.domain.todo.dto.TodoResponse
 import com.umin.todoapp.domain.exception.ModelNotFoundException
 import com.umin.todoapp.domain.todo.dto.TodoWithCommentsResponse
-import com.umin.todoapp.domain.todo.model.Todo
-import com.umin.todoapp.domain.todo.model.toResponse
-import com.umin.todoapp.domain.todo.model.withCommentsToResponse
 import com.umin.todoapp.domain.todo.repository.TodoRepository
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
@@ -27,13 +23,8 @@ class TodoServiceImpl(
     override fun createTodo(request: TodoRequest): TodoResponse {
         validateInput(request.title, request.description)
 
-        return todoRepository.save(
-            Todo(
-                title = request.title,
-                description = request.description,
-                writer = request.writer
-            )
-        ).toResponse()
+        return TodoResponse.from(
+            todoRepository.save(request.to()))
     }
 
     override fun getTodoList(sort: String?, writer: String?): List<TodoResponse> {
@@ -45,16 +36,15 @@ class TodoServiceImpl(
             else -> {
                 todoRepository.findAllByOrderByCreatedAtDesc()
             }
-        }.map { it.toResponse() }
+        }.map { TodoResponse.from(it) }
         return writer?.let { todoList.filter { todo -> todo.writer == it } }?: todoList
     }
 
     override fun getTodoById(todoId: Long): TodoWithCommentsResponse {
         val todo = todoRepository.findByIdOrNull(todoId) ?: throw ModelNotFoundException("Todo", todoId)
-        return todo.withCommentsToResponse()
+        return TodoWithCommentsResponse.from(todo)
     }
 
-    @Transactional
     override fun updateTodo(todoId: Long, request: TodoRequest): TodoResponse {
         validateInput(request.title, request.description)
 
@@ -65,7 +55,7 @@ class TodoServiceImpl(
         todo.description = description
         todo.writer = writer
 
-        return todo.toResponse()
+        return TodoResponse.from(todoRepository.save(todo))
     }
 
     override fun deleteTodo(todoId: Long) {
@@ -90,7 +80,7 @@ class TodoServiceImpl(
                 todo.setInProgress()
             }
         }
-        return todo.toResponse()
+        return TodoResponse.from(todo)
     }
 
     override fun createComment(todoId: Long, request: CommentRequest): CommentResponse {
@@ -105,7 +95,7 @@ class TodoServiceImpl(
         todo.addComment(comment)
         todoRepository.save(todo)
 
-        return comment.toResponse()
+        return CommentResponse.from(comment)
     }
 
     override fun updateComment(todoId: Long, commentId: Long, request: CommentRequest): CommentResponse {
@@ -118,7 +108,7 @@ class TodoServiceImpl(
 
         comment.content = request.content
 
-        return commentRepository.save(comment).toResponse()
+        return CommentResponse.from(commentRepository.save(comment))
     }
 
     override fun deleteComment(todoId: Long, commentId: Long, request: DeleteCommentRequest) {
