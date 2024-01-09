@@ -27,6 +27,16 @@ class Todo(
     var comments: MutableList<Comment> = mutableListOf()
 
 ) {
+    init {
+        if (title.isEmpty() || title.length > 200) {
+            throw IllegalArgumentException("Title must be between 1 and 200 characters.")
+        }
+
+        if (description.isEmpty() || description.length > 1000) {
+            throw IllegalArgumentException("Description must be between 1 and 1000 characters.")
+        }
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null
