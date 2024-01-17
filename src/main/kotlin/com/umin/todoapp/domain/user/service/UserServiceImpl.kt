@@ -4,11 +4,13 @@ import com.umin.todoapp.domain.user.dto.SignupRequest
 import com.umin.todoapp.domain.user.dto.UserResponse
 import com.umin.todoapp.domain.user.model.User
 import com.umin.todoapp.domain.user.repository.UserRepository
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
 @Service
 class UserServiceImpl(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val passwordEncoder: PasswordEncoder
 ) : UserService {
 
     override fun signup(request: SignupRequest): UserResponse {
@@ -19,7 +21,7 @@ class UserServiceImpl(
 
         return User(
             email = request.email,
-            password = request.password,
+            password = passwordEncoder.encode(request.password),
             name = request.name
         )
             .let { userRepository.save(it) }
