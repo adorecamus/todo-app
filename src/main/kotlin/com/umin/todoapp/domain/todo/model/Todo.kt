@@ -1,6 +1,7 @@
 package com.umin.todoapp.domain.todo.model
 
 import com.umin.todoapp.domain.comment.model.Comment
+import com.umin.todoapp.domain.user.model.User
 import jakarta.persistence.*
 import java.time.OffsetDateTime
 
@@ -14,11 +15,12 @@ class Todo(
     @Column(name = "description")
     var description: String,
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    val user: User,
+
     @Column(name = "created_at")
     val createdAt: OffsetDateTime = OffsetDateTime.now(),
-
-    @Column(name = "writer")
-    var writer: String,
 
     @Column(name = "completion_status")
     var completionStatus: Boolean = false,
@@ -60,4 +62,14 @@ class Todo(
     fun removeComment(comment: Comment) {
         comments.remove(comment)
     }
+
+    fun compareUserIdWith(userId: Long): Boolean {
+        return user.id == userId
+    }
+
+    fun changeTodo(title: String, description: String) {
+        this.title = title
+        this.description = description
+    }
+
 }

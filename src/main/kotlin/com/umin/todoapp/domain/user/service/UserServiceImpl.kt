@@ -7,14 +7,14 @@ import com.umin.todoapp.domain.user.dto.LoginResponse
 import com.umin.todoapp.domain.user.dto.SignupRequest
 import com.umin.todoapp.domain.user.dto.UserResponse
 import com.umin.todoapp.domain.user.model.User
-import com.umin.todoapp.domain.user.repository.UserRepository
+import com.umin.todoapp.domain.user.repository.IUserRepository
 import com.umin.todoapp.infra.security.jwt.JwtPlugin
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
 @Service
 class UserServiceImpl(
-    private val userRepository: UserRepository,
+    private val userRepository: IUserRepository,
     private val passwordEncoder: PasswordEncoder,
     private val jwtPlugin: JwtPlugin
 ) : UserService {

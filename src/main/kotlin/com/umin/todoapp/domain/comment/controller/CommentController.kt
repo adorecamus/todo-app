@@ -2,10 +2,11 @@ package com.umin.todoapp.domain.comment.controller
 
 import com.umin.todoapp.domain.comment.dto.CommentRequest
 import com.umin.todoapp.domain.comment.dto.CommentResponse
-import com.umin.todoapp.domain.comment.dto.DeleteCommentRequest
 import com.umin.todoapp.domain.todo.service.TodoService
+import com.umin.todoapp.infra.security.UserPrincipal
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -23,31 +24,33 @@ class CommentController(
     @PostMapping
     fun createComment(
         @PathVariable todoId: Long,
-        @RequestBody request: CommentRequest
+        @RequestBody request: CommentRequest,
+        @AuthenticationPrincipal userPrincipal: UserPrincipal
     ): ResponseEntity<CommentResponse> {
         return ResponseEntity
             .status(HttpStatus.CREATED)
-            .body(todoService.createComment(todoId, request))
+            .body(todoService.createComment(todoId, request, userPrincipal.id))
     }
 
     @PutMapping("/{commentId}")
     fun updateComment(
         @PathVariable todoId: Long,
         @PathVariable commentId: Long,
-        @RequestBody request: CommentRequest
+        @RequestBody request: CommentRequest,
+        @AuthenticationPrincipal userPrincipal: UserPrincipal
     ): ResponseEntity<CommentResponse> {
         return ResponseEntity
             .status(HttpStatus.OK)
-            .body(todoService.updateComment(todoId, commentId, request))
+            .body(todoService.updateComment(todoId, commentId, request, userPrincipal.id))
     }
 
     @DeleteMapping("/{commentId}")
     fun deleteComment(
         @PathVariable todoId: Long,
         @PathVariable commentId: Long,
-        @RequestBody request: DeleteCommentRequest
+        @AuthenticationPrincipal userPrincipal: UserPrincipal
     ): ResponseEntity<CommentResponse> {
-        todoService.deleteComment(todoId, commentId, request)
+        todoService.deleteComment(todoId, commentId, userPrincipal.id)
         return ResponseEntity
             .status(HttpStatus.NO_CONTENT)
             .build()

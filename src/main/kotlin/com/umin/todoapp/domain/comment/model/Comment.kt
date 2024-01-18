@@ -1,6 +1,7 @@
 package com.umin.todoapp.domain.comment.model
 
 import com.umin.todoapp.domain.todo.model.Todo
+import com.umin.todoapp.domain.user.model.User
 import jakarta.persistence.*
 import java.time.OffsetDateTime
 
@@ -11,11 +12,9 @@ class Comment(
     @Column(name = "content")
     var content: String,
 
-    @Column(name = "writer")
-    val writer: String,
-
-    @Column(name = "password")
-    val password: String,
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    val user: User,
 
     @Column(name = "created_at")
     val createdAt: OffsetDateTime = OffsetDateTime.now(),
@@ -29,7 +28,12 @@ class Comment(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null
 
-    fun checkIfWriter(writer: String, password: String): Boolean {
-        return writer == this.writer && password == this.password
+    fun compareUserIdWith(userId: Long): Boolean {
+        return user.id == userId
     }
+
+    fun changeComment(content: String) {
+        this.content = content
+    }
+
 }
