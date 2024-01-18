@@ -2,7 +2,6 @@ package com.umin.todoapp.domain.todo.service
 
 import com.umin.todoapp.domain.comment.dto.CommentRequest
 import com.umin.todoapp.domain.comment.dto.CommentResponse
-import com.umin.todoapp.domain.comment.dto.DeleteCommentRequest
 import com.umin.todoapp.domain.comment.model.Comment
 import com.umin.todoapp.domain.comment.repository.ICommentRepository
 import com.umin.todoapp.domain.exception.ForbiddenException
@@ -113,7 +112,7 @@ class TodoServiceImpl(
         val comment =
             commentRepository.findByTodoIdAndId(todoId, commentId) ?: throw ModelNotFoundException("Comment", commentId)
 
-        if(!comment.compareUserIdWith(userId!!)){
+        if (!comment.compareUserIdWith(userId!!)) {
             throw ForbiddenException(userId, "Comment", commentId)
         }
 
@@ -122,11 +121,14 @@ class TodoServiceImpl(
         return CommentResponse.from(comment)
     }
 
-    override fun deleteComment(todoId: Long, commentId: Long, request: DeleteCommentRequest) {
+    override fun deleteComment(todoId: Long, commentId: Long, userId: Long) {
+
         val todo = todoRepository.findById(todoId) ?: throw ModelNotFoundException("Todo", todoId)
         val comment = commentRepository.findById(commentId) ?: throw ModelNotFoundException("Comment", commentId)
 
-        TODO("작성자 본인인지 확인")
+        if (!comment.compareUserIdWith(userId)) {
+            throw ForbiddenException(userId, "Comment", commentId)
+        }
 
         todo.removeComment(comment)
 

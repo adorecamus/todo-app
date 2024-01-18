@@ -2,7 +2,6 @@ package com.umin.todoapp.domain.todo.service
 
 import com.umin.todoapp.domain.comment.dto.CommentRequest
 import com.umin.todoapp.domain.comment.dto.CommentResponse
-import com.umin.todoapp.domain.comment.dto.DeleteCommentRequest
 import com.umin.todoapp.domain.todo.dto.TodoRequest
 import com.umin.todoapp.domain.todo.dto.TodoResponse
 import com.umin.todoapp.domain.todo.dto.TodoWithCommentsResponse
@@ -24,5 +23,5 @@ interface TodoService {
 
     fun updateComment(todoId: Long, commentId: Long, request: CommentRequest, userId: Long): CommentResponse
 
-    fun deleteComment(todoId: Long, commentId: Long, request: DeleteCommentRequest)
+    fun deleteComment(todoId: Long, commentId: Long, userId: Long)
 }

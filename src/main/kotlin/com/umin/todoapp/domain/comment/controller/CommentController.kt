@@ -2,7 +2,6 @@ package com.umin.todoapp.domain.comment.controller
 
 import com.umin.todoapp.domain.comment.dto.CommentRequest
 import com.umin.todoapp.domain.comment.dto.CommentResponse
-import com.umin.todoapp.domain.comment.dto.DeleteCommentRequest
 import com.umin.todoapp.domain.todo.service.TodoService
 import com.umin.todoapp.infra.security.UserPrincipal
 import org.springframework.http.HttpStatus
@@ -49,9 +48,9 @@ class CommentController(
     fun deleteComment(
         @PathVariable todoId: Long,
         @PathVariable commentId: Long,
-        @RequestBody request: DeleteCommentRequest
+        @AuthenticationPrincipal userPrincipal: UserPrincipal
     ): ResponseEntity<CommentResponse> {
-        todoService.deleteComment(todoId, commentId, request)
+        todoService.deleteComment(todoId, commentId, userPrincipal.id)
         return ResponseEntity
             .status(HttpStatus.NO_CONTENT)
             .build()
