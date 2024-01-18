@@ -1,5 +1,7 @@
 package com.umin.todoapp.domain.user.controller
 
+import com.umin.todoapp.domain.user.dto.LoginRequest
+import com.umin.todoapp.domain.user.dto.LoginResponse
 import com.umin.todoapp.domain.user.dto.SignupRequest
 import com.umin.todoapp.domain.user.dto.UserResponse
 import com.umin.todoapp.domain.user.service.UserService
@@ -19,6 +21,13 @@ class UserController(
         return ResponseEntity
             .status(HttpStatus.CREATED)
             .body(userService.signup(request))
+    }
+
+    @PostMapping("/login")
+    fun login(@RequestBody loginRequest: LoginRequest): ResponseEntity<LoginResponse> {
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(userService.login(loginRequest))
     }
 
 }
