@@ -1,6 +1,7 @@
 package com.umin.todoapp.domain.comment.model
 
 import com.umin.todoapp.domain.todo.model.Todo
+import com.umin.todoapp.domain.user.model.User
 import jakarta.persistence.*
 import java.time.OffsetDateTime
 
@@ -10,9 +11,6 @@ class Comment(
 
     @Column(name = "content")
     var content: String,
-
-    @Column(name = "writer")
-    val writer: String,
 
     @Column(name = "password")
     val password: String,
@@ -29,7 +27,4 @@ class Comment(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null
 
-    fun checkIfWriter(writer: String, password: String): Boolean {
-        return writer == this.writer && password == this.password
-    }
 }

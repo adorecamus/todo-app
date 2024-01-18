@@ -8,7 +8,6 @@ data class TodoResponse(
     val title: String,
     val description: String,
     val createdAt: OffsetDateTime,
-    val writer: String,
     val completionStatus: Boolean
 ) {
     companion object {
@@ -18,7 +17,6 @@ data class TodoResponse(
                 title = todo.title,
                 description = todo.description,
                 createdAt = todo.createdAt,
-                writer = todo.writer,
                 completionStatus = todo.completionStatus
             )
         }

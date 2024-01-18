@@ -17,9 +17,6 @@ class Todo(
     @Column(name = "created_at")
     val createdAt: OffsetDateTime = OffsetDateTime.now(),
 
-    @Column(name = "writer")
-    var writer: String,
-
     @Column(name = "completion_status")
     var completionStatus: Boolean = false,
 

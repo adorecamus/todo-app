@@ -9,7 +9,6 @@ data class TodoWithCommentsResponse(
     val title: String,
     val description: String?,
     val createdAt: OffsetDateTime,
-    val writer: String,
     val completionStatus: Boolean,
     val comments: List<CommentResponse>?
 ) {
@@ -20,7 +19,6 @@ data class TodoWithCommentsResponse(
                 title = todo.title,
                 description = todo.description,
                 createdAt = todo.createdAt,
-                writer = todo.writer,
                 completionStatus = todo.completionStatus,
                 comments = todo.comments.map { CommentResponse.from(it) }
             )
