@@ -9,7 +9,9 @@ import com.umin.todoapp.domain.todo.dto.TodoRequest
 import com.umin.todoapp.domain.todo.dto.TodoResponse
 import com.umin.todoapp.domain.exception.ModelNotFoundException
 import com.umin.todoapp.domain.todo.dto.TodoWithCommentsResponse
+import com.umin.todoapp.domain.todo.model.Todo
 import com.umin.todoapp.domain.todo.repository.ITodoRepository
+import com.umin.todoapp.domain.user.repository.IUserRepository
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -17,12 +19,21 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 class TodoServiceImpl(
     private val todoRepository: ITodoRepository,
-    private val commentRepository: CommentRepository
-): TodoService {
+    private val commentRepository: CommentRepository,
+    private val userRepository: IUserRepository
+) : TodoService {
 
-    override fun createTodo(request: TodoRequest): TodoResponse {
-        return TodoResponse.from(
-            todoRepository.save(request.to()))
+    override fun createTodo(request: TodoRequest, userId: Long): TodoResponse {
+
+        val user = userRepository.findById(userId) ?: throw ModelNotFoundException("User", userId)
+
+        return todoRepository.save(
+            Todo(
+                title = request.title,
+                description = request.description,
+                user = user
+            )
+        ).let { TodoResponse.from(it) }
     }
 
     override fun getTodoList(sort: String?, writer: String?): List<TodoResponse> {

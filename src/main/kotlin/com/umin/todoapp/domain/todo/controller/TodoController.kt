@@ -4,8 +4,10 @@ import com.umin.todoapp.domain.todo.dto.TodoRequest
 import com.umin.todoapp.domain.todo.dto.TodoResponse
 import com.umin.todoapp.domain.todo.dto.TodoWithCommentsResponse
 import com.umin.todoapp.domain.todo.service.TodoService
+import com.umin.todoapp.infra.security.UserPrincipal
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
@@ -24,10 +26,13 @@ class TodoController(
 ) {
 
     @PostMapping
-    fun createTodo(@RequestBody request: TodoRequest): ResponseEntity<TodoResponse> {
+    fun createTodo(
+        @AuthenticationPrincipal userPrincipal: UserPrincipal,
+        @RequestBody request: TodoRequest
+    ): ResponseEntity<TodoResponse> {
         return ResponseEntity
             .status(HttpStatus.CREATED)
-            .body(todoService.createTodo(request))
+            .body(todoService.createTodo(request, userPrincipal.id))
     }
 
     @GetMapping
@@ -61,7 +66,8 @@ class TodoController(
 
     @PatchMapping("/{todoId}")
     fun updateTodoCompletionStatus(
-        @PathVariable todoId: Long, @RequestParam completionStatus: Boolean): ResponseEntity<TodoResponse> {
+        @PathVariable todoId: Long, @RequestParam completionStatus: Boolean
+    ): ResponseEntity<TodoResponse> {
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(todoService.updateTodoCompletionStatus(todoId, completionStatus))

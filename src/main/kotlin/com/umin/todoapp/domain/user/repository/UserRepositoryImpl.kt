@@ -2,6 +2,7 @@ package com.umin.todoapp.domain.user.repository
 
 import com.umin.todoapp.domain.user.model.User
 import com.umin.todoapp.infra.querydsl.QueryDslSupport
+import org.springframework.data.repository.findByIdOrNull
 
 class UserRepositoryImpl(
     private val userJpaRepository: UserJpaRepository
@@ -17,6 +18,10 @@ class UserRepositoryImpl(
 
     override fun save(user: User): User {
         return userJpaRepository.save(user)
+    }
+
+    override fun findById(id: Long): User? {
+        return userJpaRepository.findByIdOrNull(id)
     }
 
 }
