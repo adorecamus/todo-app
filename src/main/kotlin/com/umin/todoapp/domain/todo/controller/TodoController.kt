@@ -36,7 +36,10 @@ class TodoController(
     }
 
     @GetMapping
-    fun getTodoList(@RequestParam(required = false) sort: String?, @RequestParam(required = false) writer: String?): ResponseEntity<List<TodoResponse>> {
+    fun getTodoList(
+        @RequestParam(required = false) sort: String?,
+        @RequestParam(required = false) writer: String?
+    ): ResponseEntity<List<TodoResponse>> {
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(todoService.getTodoList(sort, writer))
@@ -60,8 +63,11 @@ class TodoController(
     }
 
     @DeleteMapping("/{todoId}")
-    fun deleteTodo(@PathVariable todoId: Long): ResponseEntity<Unit> {
-        todoService.deleteTodo(todoId)
+    fun deleteTodo(
+        @AuthenticationPrincipal userPrincipal: UserPrincipal,
+        @PathVariable todoId: Long
+    ): ResponseEntity<Unit> {
+        todoService.deleteTodo(todoId, userPrincipal.id)
         return ResponseEntity
             .status(HttpStatus.NO_CONTENT)
             .build()

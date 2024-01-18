@@ -60,8 +60,14 @@ class TodoServiceImpl(
         return TodoResponse.from(todo)
     }
 
-    override fun deleteTodo(todoId: Long) {
+    override fun deleteTodo(todoId: Long, userId: Long) {
+
         val todo = todoRepository.findById(todoId) ?: throw ModelNotFoundException("Todo", todoId)
+
+        if (!todo.compareUserIdWith(userId)) {
+            throw ForbiddenException(userId, "Todo", todoId)
+        }
+
         todoRepository.delete(todo)
     }
 
