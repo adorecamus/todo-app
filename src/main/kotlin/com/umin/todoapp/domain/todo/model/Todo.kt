@@ -62,4 +62,14 @@ class Todo(
     fun removeComment(comment: Comment) {
         comments.remove(comment)
     }
+
+    fun compareUserIdWith(userId: Long): Boolean {
+        return user.id == userId
+    }
+
+    fun changeTodo(title: String, description: String) {
+        this.title = title
+        this.description = description
+    }
+
 }

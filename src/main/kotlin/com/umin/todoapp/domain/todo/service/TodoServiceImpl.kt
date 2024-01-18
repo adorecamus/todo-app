@@ -5,6 +5,7 @@ import com.umin.todoapp.domain.comment.dto.CommentResponse
 import com.umin.todoapp.domain.comment.dto.DeleteCommentRequest
 import com.umin.todoapp.domain.comment.model.Comment
 import com.umin.todoapp.domain.comment.repository.CommentRepository
+import com.umin.todoapp.domain.exception.ForbiddenException
 import com.umin.todoapp.domain.todo.dto.TodoRequest
 import com.umin.todoapp.domain.todo.dto.TodoResponse
 import com.umin.todoapp.domain.exception.ModelNotFoundException
@@ -46,12 +47,15 @@ class TodoServiceImpl(
     }
 
     @Transactional
-    override fun updateTodo(todoId: Long, request: TodoRequest): TodoResponse {
+    override fun updateTodo(todoId: Long, request: TodoRequest, userId: Long): TodoResponse {
+
         val todo = todoRepository.findById(todoId) ?: throw ModelNotFoundException("Todo", todoId)
 
-        val (title, description) = request
-        todo.title = title
-        todo.description = description
+        if (!todo.compareUserIdWith(userId)) {
+            throw ForbiddenException(userId, "Todo", todoId)
+        }
+
+        todo.changeTodo(request.title, request.description)
 
         return TodoResponse.from(todo)
     }

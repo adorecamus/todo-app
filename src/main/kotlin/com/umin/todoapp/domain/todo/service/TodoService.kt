@@ -14,7 +14,7 @@ interface TodoService {
 
     fun getTodoById(todoId: Long): TodoWithCommentsResponse
 
-    fun updateTodo(todoId: Long, request: TodoRequest): TodoResponse
+    fun updateTodo(todoId: Long, request: TodoRequest, userId: Long): TodoResponse
 
     fun deleteTodo(todoId: Long)
 
