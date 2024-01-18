@@ -8,7 +8,8 @@ data class TodoResponse(
     val title: String,
     val description: String,
     val createdAt: OffsetDateTime,
-    val completionStatus: Boolean
+    val completionStatus: Boolean,
+    val writer: String
 ) {
     companion object {
         fun from(todo: Todo): TodoResponse {
@@ -17,7 +18,8 @@ data class TodoResponse(
                 title = todo.title,
                 description = todo.description,
                 createdAt = todo.createdAt,
-                completionStatus = todo.completionStatus
+                completionStatus = todo.completionStatus,
+                writer = todo.user.name
             )
         }
     }
