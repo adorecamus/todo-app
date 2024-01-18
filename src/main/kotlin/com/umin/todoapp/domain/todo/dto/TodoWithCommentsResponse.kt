@@ -10,6 +10,7 @@ data class TodoWithCommentsResponse(
     val description: String?,
     val createdAt: OffsetDateTime,
     val completionStatus: Boolean,
+    val writer: String,
     val comments: List<CommentResponse>?
 ) {
     companion object {
@@ -20,6 +21,7 @@ data class TodoWithCommentsResponse(
                 description = todo.description,
                 createdAt = todo.createdAt,
                 completionStatus = todo.completionStatus,
+                writer = todo.user.name,
                 comments = todo.comments.map { CommentResponse.from(it) }
             )
         }

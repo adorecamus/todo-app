@@ -35,8 +35,8 @@ class TodoServiceImpl(
         ).let { TodoResponse.from(it) }
     }
 
-    override fun getTodoList(sort: String?, writer: String?): List<TodoResponse> {
-        return todoRepository.getTodoList(sort, writer).map { TodoResponse.from(it) }
+    override fun getTodoList(sort: String?, writer: String?): List<TodoWithCommentsResponse> {
+        return todoRepository.getTodoList(sort, writer).map { TodoWithCommentsResponse.from(it) }
     }
 
     override fun getTodoById(todoId: Long): TodoWithCommentsResponse {
