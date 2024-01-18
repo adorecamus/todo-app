@@ -22,7 +22,7 @@ interface TodoService {
 
     fun createComment(todoId: Long, request: CommentRequest, userId: Long): CommentResponse
 
-    fun updateComment(todoId: Long, commentId: Long, request: CommentRequest): CommentResponse
+    fun updateComment(todoId: Long, commentId: Long, request: CommentRequest, userId: Long): CommentResponse
 
     fun deleteComment(todoId: Long, commentId: Long, request: DeleteCommentRequest)
 }

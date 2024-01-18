@@ -37,11 +37,12 @@ class CommentController(
     fun updateComment(
         @PathVariable todoId: Long,
         @PathVariable commentId: Long,
-        @RequestBody request: CommentRequest
+        @RequestBody request: CommentRequest,
+        @AuthenticationPrincipal userPrincipal: UserPrincipal
     ): ResponseEntity<CommentResponse> {
         return ResponseEntity
             .status(HttpStatus.OK)
-            .body(todoService.updateComment(todoId, commentId, request))
+            .body(todoService.updateComment(todoId, commentId, request, userPrincipal.id))
     }
 
     @DeleteMapping("/{commentId}")

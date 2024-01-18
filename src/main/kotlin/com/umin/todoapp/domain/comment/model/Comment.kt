@@ -28,4 +28,12 @@ class Comment(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null
 
+    fun compareUserIdWith(userId: Long): Boolean {
+        return user.id == userId
+    }
+
+    fun changeComment(content: String) {
+        this.content = content
+    }
+
 }

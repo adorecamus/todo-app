@@ -108,13 +108,16 @@ class TodoServiceImpl(
     }
 
     @Transactional
-    override fun updateComment(todoId: Long, commentId: Long, request: CommentRequest): CommentResponse {
+    override fun updateComment(todoId: Long, commentId: Long, request: CommentRequest, userId: Long): CommentResponse {
+
         val comment =
             commentRepository.findByTodoIdAndId(todoId, commentId) ?: throw ModelNotFoundException("Comment", commentId)
 
-        TODO("작성자 본인인지 확인")
+        if(!comment.compareUserIdWith(userId!!)){
+            throw ForbiddenException(userId, "Comment", commentId)
+        }
 
-        comment.content = request.content
+        comment.changeComment(request.content)
 
         return CommentResponse.from(comment)
     }
