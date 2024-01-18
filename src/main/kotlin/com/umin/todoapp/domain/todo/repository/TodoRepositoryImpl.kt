@@ -1,6 +1,7 @@
 package com.umin.todoapp.domain.todo.repository
 
 import com.querydsl.core.BooleanBuilder
+import com.umin.todoapp.domain.comment.model.QComment
 import com.umin.todoapp.domain.todo.model.QTodo
 import com.umin.todoapp.domain.todo.model.Todo
 import com.umin.todoapp.domain.user.model.QUser
@@ -13,6 +14,7 @@ class TodoRepositoryImpl(
 
     private val todo = QTodo.todo
     private val user = QUser.user
+    private val comment = QComment.comment
 
     override fun save(todo: Todo): Todo {
         return todoJpaRepository.save(todo)
@@ -25,8 +27,8 @@ class TodoRepositoryImpl(
 
         val query = queryFactory.select(todo)
             .from(todo)
-            .leftJoin(todo.user, user)
-            .fetchJoin()
+            .leftJoin(todo.user, user).fetchJoin()
+            .leftJoin(todo.comments, comment)
             .where(whereClause)
 
         sort?.let { query.orderBy(todo.id.asc()) } ?: query.orderBy(todo.id.desc())

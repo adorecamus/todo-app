@@ -9,7 +9,7 @@ import com.umin.todoapp.domain.todo.dto.TodoWithCommentsResponse
 interface TodoService {
     fun createTodo(request: TodoRequest, userId: Long): TodoResponse
 
-    fun getTodoList(sort: String?, writer: String?): List<TodoResponse>
+    fun getTodoList(sort: String?, writer: String?): List<TodoWithCommentsResponse>
 
     fun getTodoById(todoId: Long): TodoWithCommentsResponse
 

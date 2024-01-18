@@ -39,7 +39,7 @@ class TodoController(
     fun getTodoList(
         @RequestParam(required = false) sort: String?,
         @RequestParam(required = false) writer: String?
-    ): ResponseEntity<List<TodoResponse>> {
+    ): ResponseEntity<List<TodoWithCommentsResponse>> {
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(todoService.getTodoList(sort, writer))
