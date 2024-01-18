@@ -1,5 +1,7 @@
 package com.umin.todoapp.domain.user.service
 
+import com.umin.todoapp.domain.user.dto.LoginRequest
+import com.umin.todoapp.domain.user.dto.LoginResponse
 import com.umin.todoapp.domain.user.dto.SignupRequest
 import com.umin.todoapp.domain.user.dto.UserResponse
 import com.umin.todoapp.domain.user.model.User
@@ -26,6 +28,10 @@ class UserServiceImpl(
         )
             .let { userRepository.save(it) }
             .let { UserResponse.from(it) }
+    }
+
+    override fun login(request: LoginRequest): LoginResponse {
+        TODO()
     }
 
 }
