@@ -1,5 +1,8 @@
 package com.umin.todoapp.domain.config
 
+import com.umin.todoapp.domain.comment.repository.CommentJpaRepository
+import com.umin.todoapp.domain.comment.repository.CommentRepositoryImpl
+import com.umin.todoapp.domain.comment.repository.ICommentRepository
 import com.umin.todoapp.domain.todo.repository.ITodoRepository
 import com.umin.todoapp.domain.todo.repository.TodoJpaRepository
 import com.umin.todoapp.domain.todo.repository.TodoRepositoryImpl
@@ -15,6 +18,13 @@ class RepositoryConfig {
     @Bean
     fun todoRepository(todoJpaRepository: TodoJpaRepository): ITodoRepository {
         return TodoRepositoryImpl(todoJpaRepository)
+    }
+
+    @Bean
+    fun commentRespository(
+        commentJpaRespository: CommentJpaRepository
+    ): ICommentRepository {
+        return CommentRepositoryImpl(commentJpaRespository)
     }
 
     @Bean

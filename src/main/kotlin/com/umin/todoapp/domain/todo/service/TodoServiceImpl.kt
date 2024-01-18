@@ -4,7 +4,7 @@ import com.umin.todoapp.domain.comment.dto.CommentRequest
 import com.umin.todoapp.domain.comment.dto.CommentResponse
 import com.umin.todoapp.domain.comment.dto.DeleteCommentRequest
 import com.umin.todoapp.domain.comment.model.Comment
-import com.umin.todoapp.domain.comment.repository.CommentRepository
+import com.umin.todoapp.domain.comment.repository.ICommentRepository
 import com.umin.todoapp.domain.exception.ForbiddenException
 import com.umin.todoapp.domain.todo.dto.TodoRequest
 import com.umin.todoapp.domain.todo.dto.TodoResponse
@@ -13,14 +13,13 @@ import com.umin.todoapp.domain.todo.dto.TodoWithCommentsResponse
 import com.umin.todoapp.domain.todo.model.Todo
 import com.umin.todoapp.domain.todo.repository.ITodoRepository
 import com.umin.todoapp.domain.user.repository.IUserRepository
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
 class TodoServiceImpl(
     private val todoRepository: ITodoRepository,
-    private val commentRepository: CommentRepository,
+    private val commentRepository: ICommentRepository,
     private val userRepository: IUserRepository
 ) : TodoService {
 
@@ -91,13 +90,16 @@ class TodoServiceImpl(
         return TodoResponse.from(todo)
     }
 
-    override fun createComment(todoId: Long, request: CommentRequest): CommentResponse {
+    override fun createComment(todoId: Long, request: CommentRequest, userId: Long): CommentResponse {
+
         val todo = todoRepository.findById(todoId) ?: throw ModelNotFoundException("Todo", todoId)
+
+        val user = userRepository.findById(userId) ?: throw ModelNotFoundException("User", userId)
 
         val comment = Comment(
             content = request.content,
-            password = request.password,
-            todo = todo
+            todo = todo,
+            user = user
         )
         todo.addComment(comment)
         todoRepository.save(todo)
@@ -119,7 +121,7 @@ class TodoServiceImpl(
 
     override fun deleteComment(todoId: Long, commentId: Long, request: DeleteCommentRequest) {
         val todo = todoRepository.findById(todoId) ?: throw ModelNotFoundException("Todo", todoId)
-        val comment = commentRepository.findByIdOrNull(commentId) ?: throw ModelNotFoundException("Comment", commentId)
+        val comment = commentRepository.findById(commentId) ?: throw ModelNotFoundException("Comment", commentId)
 
         TODO("작성자 본인인지 확인")
 

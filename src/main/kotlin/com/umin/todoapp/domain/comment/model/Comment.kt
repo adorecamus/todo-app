@@ -12,8 +12,9 @@ class Comment(
     @Column(name = "content")
     var content: String,
 
-    @Column(name = "password")
-    val password: String,
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    val user: User,
 
     @Column(name = "created_at")
     val createdAt: OffsetDateTime = OffsetDateTime.now(),
