@@ -52,4 +52,22 @@ class TodoTest {
         }
     }
 
+    @Test
+    fun `사용자 id의 일치 여부를 반환하는지 확인`() {
+
+        // GIVEN
+        val todo = Todo(
+            title = "제목",
+            description = "내용",
+            user = user
+        )
+        val requestUserId = 1L
+
+        // WHEN
+        every { user.id } returns 1L
+
+        // THEN
+        todo.compareUserIdWith(requestUserId) shouldBe true
+    }
+
 }
