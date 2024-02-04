@@ -36,45 +36,42 @@ class TodoServiceImpl(
     }
 
     override fun getTodoList(sort: String?, writer: String?): List<TodoWithCommentsResponse> {
-        return todoRepository.getTodoList(sort, writer).map { TodoWithCommentsResponse.from(it) }
+
+        return todoRepository.getTodoList(sort, writer)
+            .map { TodoWithCommentsResponse.from(it) }
     }
 
     override fun getTodoById(todoId: Long): TodoWithCommentsResponse {
+
         val todo = todoRepository.findById(todoId) ?: throw ModelNotFoundException("Todo", todoId)
+
         return TodoWithCommentsResponse.from(todo)
     }
 
     @Transactional
     override fun updateTodo(todoId: Long, request: TodoRequest, userId: Long): TodoResponse {
 
-        val todo = todoRepository.findById(todoId) ?: throw ModelNotFoundException("Todo", todoId)
+        val todo = getTodoIfAuthorized(todoId, userId)
 
-        if (!todo.compareUserIdWith(userId)) {
-            throw ForbiddenException(userId, "Todo", todoId)
-        }
-
-        todo.changeTodo(request.title, request.description)
+        todo.update(request.title, request.description)
 
         return TodoResponse.from(todo)
     }
 
     override fun deleteTodo(todoId: Long, userId: Long) {
 
-        val todo = todoRepository.findById(todoId) ?: throw ModelNotFoundException("Todo", todoId)
-
-        if (!todo.compareUserIdWith(userId)) {
-            throw ForbiddenException(userId, "Todo", todoId)
-        }
+        val todo = getTodoIfAuthorized(todoId, userId)
 
         todoRepository.delete(todo)
     }
 
     @Transactional
-    override fun updateTodoCompletionStatus(todoId: Long, statusRequest: Boolean): TodoResponse {
-        val todo = todoRepository.findById(todoId) ?: throw ModelNotFoundException("Todo", todoId)
+    override fun updateTodoCompletionStatus(todoId: Long, statusRequest: Boolean, userId: Long): TodoResponse {
 
-        if (todo.compareStatusWith(statusRequest)) {
-            throw IllegalStateException("Completion Status is alreay $statusRequest. todoId: $todoId")
+        val todo = getTodoIfAuthorized(todoId, userId)
+
+        check(todo.isNotSameStatusWith(statusRequest)) {
+            "Todo $todoId completion Status is already $statusRequest"
         }
 
         when (statusRequest) {
@@ -109,14 +106,11 @@ class TodoServiceImpl(
     @Transactional
     override fun updateComment(todoId: Long, commentId: Long, request: CommentRequest, userId: Long): CommentResponse {
 
-        val comment =
-            commentRepository.findByTodoIdAndId(todoId, commentId) ?: throw ModelNotFoundException("Comment", commentId)
+        todoRepository.findById(todoId) ?: throw ModelNotFoundException("Todo", todoId)
 
-        if (!comment.compareUserIdWith(userId!!)) {
-            throw ForbiddenException(userId, "Comment", commentId)
-        }
+        val comment = getCommentIfAuthorized(commentId, userId)
 
-        comment.changeComment(request.content)
+        comment.update(request.content)
 
         return CommentResponse.from(comment)
     }
@@ -124,15 +118,38 @@ class TodoServiceImpl(
     override fun deleteComment(todoId: Long, commentId: Long, userId: Long) {
 
         val todo = todoRepository.findById(todoId) ?: throw ModelNotFoundException("Todo", todoId)
-        val comment = commentRepository.findById(commentId) ?: throw ModelNotFoundException("Comment", commentId)
 
-        if (!comment.compareUserIdWith(userId)) {
-            throw ForbiddenException(userId, "Comment", commentId)
-        }
+        val comment = getCommentIfAuthorized(commentId, userId)
 
         todo.removeComment(comment)
 
         todoRepository.save(todo)
+    }
+
+    private fun getTodoIfAuthorized(todoId: Long, userId: Long): Todo {
+
+        val todo = todoRepository.findById(todoId) ?: throw ModelNotFoundException("Todo", todoId)
+
+        val user = userRepository.findById(userId) ?: throw ModelNotFoundException("User", userId)
+
+        if (!todo.matchUserIdWith(user.id!!)) {
+            throw ForbiddenException(user.id, "Todo", todo.id)
+        }
+
+        return todo
+    }
+
+    private fun getCommentIfAuthorized(commentId: Long, userId: Long): Comment {
+
+        val comment = commentRepository.findById(commentId) ?: throw ModelNotFoundException("Comment", commentId)
+
+        val user = userRepository.findById(userId) ?: throw ModelNotFoundException("User", userId)
+
+        if (!comment.matchUserIdWith(user.id!!)) {
+            throw ForbiddenException(user.id, "Comment", comment.id)
+        }
+
+        return comment
     }
 
 }
