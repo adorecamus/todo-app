@@ -36,6 +36,15 @@ class TodoRepositoryImpl(
         return query.fetch()
     }
 
+    override fun getTodoListByIds(ids: List<Long>?): List<Todo> {
+
+        return queryFactory.select(todo)
+            .from(todo)
+            .leftJoin(todo.user, user).fetchJoin()
+            .where(todo.id.`in`(ids))
+            .fetch()
+    }
+
     override fun findById(id: Long): Todo? {
         return todoJpaRepository.findByIdOrNull(id)
     }

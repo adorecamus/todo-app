@@ -11,7 +11,9 @@ interface TodoService {
 
     fun getTodoList(sort: String?, writer: String?): List<TodoWithCommentsResponse>
 
-    fun getTodoById(todoId: Long): TodoWithCommentsResponse
+    fun getVisitedTodoList(userId: Long): List<TodoResponse>
+
+    fun getTodoById(todoId: Long, userId: Long): TodoWithCommentsResponse
 
     fun updateTodo(todoId: Long, request: TodoRequest, userId: Long): TodoResponse
 

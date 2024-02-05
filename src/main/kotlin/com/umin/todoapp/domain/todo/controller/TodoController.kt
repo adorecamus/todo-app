@@ -45,11 +45,23 @@ class TodoController(
             .body(todoService.getTodoList(sort, writer))
     }
 
-    @GetMapping("/{todoId}")
-    fun getTodo(@PathVariable todoId: Long): ResponseEntity<TodoWithCommentsResponse> {
+    @GetMapping("/visited")
+    fun getVisitedTodoList(
+        @AuthenticationPrincipal userPrincipal: UserPrincipal
+    ): ResponseEntity<List<TodoResponse>> {
         return ResponseEntity
             .status(HttpStatus.OK)
-            .body(todoService.getTodoById(todoId))
+            .body(todoService.getVisitedTodoList(userPrincipal.id))
+    }
+
+    @GetMapping("/{todoId}")
+    fun getTodo(
+        @PathVariable todoId: Long,
+        @AuthenticationPrincipal userPrincipal: UserPrincipal
+    ): ResponseEntity<TodoWithCommentsResponse> {
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(todoService.getTodoById(todoId, userPrincipal.id))
     }
 
     @PutMapping("/{todoId}")

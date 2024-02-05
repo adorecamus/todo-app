@@ -11,6 +11,7 @@ import com.umin.todoapp.domain.exception.ModelNotFoundException
 import com.umin.todoapp.domain.todo.dto.TodoWithCommentsResponse
 import com.umin.todoapp.domain.todo.model.Todo
 import com.umin.todoapp.domain.todo.repository.ITodoRepository
+import com.umin.todoapp.domain.todo.repository.TodoRedisRepository
 import com.umin.todoapp.domain.user.repository.IUserRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -19,7 +20,8 @@ import org.springframework.transaction.annotation.Transactional
 class TodoServiceImpl(
     private val todoRepository: ITodoRepository,
     private val commentRepository: ICommentRepository,
-    private val userRepository: IUserRepository
+    private val userRepository: IUserRepository,
+    private val todoRedisRepository: TodoRedisRepository
 ) : TodoService {
 
     override fun createTodo(request: TodoRequest, userId: Long): TodoResponse {
@@ -41,9 +43,18 @@ class TodoServiceImpl(
             .map { TodoWithCommentsResponse.from(it) }
     }
 
-    override fun getTodoById(todoId: Long): TodoWithCommentsResponse {
+    override fun getVisitedTodoList(userId: Long): List<TodoResponse> {
+
+        return todoRedisRepository.getVisitedTodoIdList(userId).let { ids ->
+            todoRepository.getTodoListByIds(ids).map { TodoResponse.from(it) }
+        }
+    }
+
+    override fun getTodoById(todoId: Long, userId: Long): TodoWithCommentsResponse {
 
         val todo = todoRepository.findById(todoId) ?: throw ModelNotFoundException("Todo", todoId)
+
+        todoRedisRepository.saveVisitedTodo(userId, todoId)
 
         return TodoWithCommentsResponse.from(todo)
     }
