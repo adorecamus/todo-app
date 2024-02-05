@@ -4,7 +4,7 @@ import com.umin.todoapp.domain.comment.dto.CommentRequest
 import com.umin.todoapp.domain.comment.dto.CommentResponse
 import com.umin.todoapp.domain.comment.model.Comment
 import com.umin.todoapp.domain.comment.repository.ICommentRepository
-import com.umin.todoapp.domain.exception.ForbiddenException
+import com.umin.todoapp.domain.exception.NotPermittedException
 import com.umin.todoapp.domain.todo.dto.TodoRequest
 import com.umin.todoapp.domain.todo.dto.TodoResponse
 import com.umin.todoapp.domain.exception.ModelNotFoundException
@@ -50,7 +50,7 @@ class TodoServiceImpl(
         val todo = todoRepository.findById(todoId) ?: throw ModelNotFoundException("Todo", todoId)
 
         if (!todo.compareUserIdWith(userId)) {
-            throw ForbiddenException(userId, "Todo", todoId)
+            throw NotPermittedException(userId, "Todo", todoId)
         }
 
         todo.changeTodo(request.title, request.description)
@@ -63,7 +63,7 @@ class TodoServiceImpl(
         val todo = todoRepository.findById(todoId) ?: throw ModelNotFoundException("Todo", todoId)
 
         if (!todo.compareUserIdWith(userId)) {
-            throw ForbiddenException(userId, "Todo", todoId)
+            throw NotPermittedException(userId, "Todo", todoId)
         }
 
         todoRepository.delete(todo)
@@ -113,7 +113,7 @@ class TodoServiceImpl(
             commentRepository.findByTodoIdAndId(todoId, commentId) ?: throw ModelNotFoundException("Comment", commentId)
 
         if (!comment.compareUserIdWith(userId!!)) {
-            throw ForbiddenException(userId, "Comment", commentId)
+            throw NotPermittedException(userId, "Comment", commentId)
         }
 
         comment.changeComment(request.content)
@@ -127,7 +127,7 @@ class TodoServiceImpl(
         val comment = commentRepository.findById(commentId) ?: throw ModelNotFoundException("Comment", commentId)
 
         if (!comment.compareUserIdWith(userId)) {
-            throw ForbiddenException(userId, "Comment", commentId)
+            throw NotPermittedException(userId, "Comment", commentId)
         }
 
         todo.removeComment(comment)

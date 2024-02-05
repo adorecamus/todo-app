@@ -26,21 +26,6 @@ class GlobalExceptionHandler : ResponseEntityExceptionHandler() {
         return handleExceptionInternal(e.errorCode, e.message)
     }
 
-    @ExceptionHandler(ModelNotFoundException::class)
-    fun handleModelNotFoundException(e: ModelNotFoundException): ResponseEntity<Any> {
-        return handleExceptionInternal(CommonErrorCode.MODEL_NOT_FOUND, e.message)
-    }
-
-    @ExceptionHandler(InvalidCredentialException::class)
-    fun handleInvalidCredential(e: InvalidCredentialException): ResponseEntity<Any> {
-        return handleExceptionInternal(CommonErrorCode.INVALID_CREDENTIAL, e.message)
-    }
-
-    @ExceptionHandler(ForbiddenException::class)
-    fun handleForbiddenException(e: ForbiddenException): ResponseEntity<Any> {
-        return handleExceptionInternal(CommonErrorCode.FORBIDDEN, e.message)
-    }
-
     @ExceptionHandler(Exception::class)
     fun handleAllException(e: Exception): ResponseEntity<Any> {
         return handleExceptionInternal(CommonErrorCode.INTERNAL_SERVER_ERROR, e.message)
@@ -52,7 +37,7 @@ class GlobalExceptionHandler : ResponseEntityExceptionHandler() {
 
     private fun makeErrorResponse(errorCode: ErrorCode, message: String?): ErrorResponse {
         return ErrorResponse(
-            code = errorCode.getName(),
+            code = errorCode.name,
             message = message
         )
     }
