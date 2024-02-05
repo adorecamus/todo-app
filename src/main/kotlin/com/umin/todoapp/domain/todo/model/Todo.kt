@@ -43,8 +43,8 @@ class Todo(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null
 
-    fun compareStatusWith(statusRequest: Boolean): Boolean {
-        return completionStatus == statusRequest
+    fun isNotSameStatusWith(status: Boolean): Boolean {
+        return completionStatus != status
     }
 
     fun complete() {
@@ -63,11 +63,11 @@ class Todo(
         comments.remove(comment)
     }
 
-    fun compareUserIdWith(userId: Long): Boolean {
+    fun matchUserIdWith(userId: Long): Boolean {
         return user.id == userId
     }
 
-    fun changeTodo(title: String, description: String) {
+    fun update(title: String, description: String) {
         this.title = title
         this.description = description
     }

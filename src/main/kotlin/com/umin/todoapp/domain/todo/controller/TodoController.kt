@@ -27,8 +27,8 @@ class TodoController(
 
     @PostMapping
     fun createTodo(
-        @AuthenticationPrincipal userPrincipal: UserPrincipal,
-        @RequestBody request: TodoRequest
+        @RequestBody request: TodoRequest,
+        @AuthenticationPrincipal userPrincipal: UserPrincipal
     ): ResponseEntity<TodoResponse> {
         return ResponseEntity
             .status(HttpStatus.CREATED)
@@ -54,8 +54,9 @@ class TodoController(
 
     @PutMapping("/{todoId}")
     fun updateTodo(
+        @PathVariable todoId: Long,
+        @RequestBody request: TodoRequest,
         @AuthenticationPrincipal userPrincipal: UserPrincipal,
-        @PathVariable todoId: Long, @RequestBody request: TodoRequest
     ): ResponseEntity<TodoResponse> {
         return ResponseEntity
             .status(HttpStatus.OK)
@@ -64,8 +65,8 @@ class TodoController(
 
     @DeleteMapping("/{todoId}")
     fun deleteTodo(
+        @PathVariable todoId: Long,
         @AuthenticationPrincipal userPrincipal: UserPrincipal,
-        @PathVariable todoId: Long
     ): ResponseEntity<Unit> {
         todoService.deleteTodo(todoId, userPrincipal.id)
         return ResponseEntity
@@ -75,11 +76,13 @@ class TodoController(
 
     @PatchMapping("/{todoId}")
     fun updateTodoCompletionStatus(
-        @PathVariable todoId: Long, @RequestParam completionStatus: Boolean
+        @PathVariable todoId: Long,
+        @RequestParam completionStatus: Boolean,
+        @AuthenticationPrincipal userPrincipal: UserPrincipal
     ): ResponseEntity<TodoResponse> {
         return ResponseEntity
             .status(HttpStatus.OK)
-            .body(todoService.updateTodoCompletionStatus(todoId, completionStatus))
+            .body(todoService.updateTodoCompletionStatus(todoId, completionStatus, userPrincipal.id))
     }
 
 }

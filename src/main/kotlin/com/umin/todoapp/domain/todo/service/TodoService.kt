@@ -17,7 +17,7 @@ interface TodoService {
 
     fun deleteTodo(todoId: Long, userId: Long)
 
-    fun updateTodoCompletionStatus(todoId: Long, statusRequest: Boolean): TodoResponse
+    fun updateTodoCompletionStatus(todoId: Long, statusRequest: Boolean, userId: Long): TodoResponse
 
     fun createComment(todoId: Long, request: CommentRequest, userId: Long): CommentResponse
 
