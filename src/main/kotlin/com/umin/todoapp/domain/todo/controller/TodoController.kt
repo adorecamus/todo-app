@@ -46,10 +46,13 @@ class TodoController(
     }
 
     @GetMapping("/{todoId}")
-    fun getTodo(@PathVariable todoId: Long): ResponseEntity<TodoWithCommentsResponse> {
+    fun getTodo(
+        @PathVariable todoId: Long,
+        @AuthenticationPrincipal userPrincipal: UserPrincipal
+    ): ResponseEntity<TodoWithCommentsResponse> {
         return ResponseEntity
             .status(HttpStatus.OK)
-            .body(todoService.getTodoById(todoId))
+            .body(todoService.getTodoById(todoId, userPrincipal.id))
     }
 
     @PutMapping("/{todoId}")
