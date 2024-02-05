@@ -1,6 +1,7 @@
 package com.umin.todoapp.infra.security
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.umin.todoapp.domain.exception.dto.CommonErrorCode
 import com.umin.todoapp.domain.exception.dto.ErrorResponse
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -22,7 +23,7 @@ class CustomAuthenticationEntryPoint: AuthenticationEntryPoint {
         response.characterEncoding = "UTF-8"
 
         val objectMapper = ObjectMapper()
-        val jsonString = objectMapper.writeValueAsString(ErrorResponse("JWT verification failed"))
+        val jsonString = objectMapper.writeValueAsString(ErrorResponse(CommonErrorCode.INVALID_CREDENTIAL.name, "JWT verification failed"))
         response.writer.write(jsonString)
     }
 }

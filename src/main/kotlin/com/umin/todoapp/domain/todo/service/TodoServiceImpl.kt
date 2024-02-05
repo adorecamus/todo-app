@@ -4,7 +4,7 @@ import com.umin.todoapp.domain.comment.dto.CommentRequest
 import com.umin.todoapp.domain.comment.dto.CommentResponse
 import com.umin.todoapp.domain.comment.model.Comment
 import com.umin.todoapp.domain.comment.repository.ICommentRepository
-import com.umin.todoapp.domain.exception.ForbiddenException
+import com.umin.todoapp.domain.exception.NotPermittedException
 import com.umin.todoapp.domain.todo.dto.TodoRequest
 import com.umin.todoapp.domain.todo.dto.TodoResponse
 import com.umin.todoapp.domain.exception.ModelNotFoundException
@@ -133,7 +133,7 @@ class TodoServiceImpl(
         val user = userRepository.findById(userId) ?: throw ModelNotFoundException("User", userId)
 
         if (!todo.matchUserIdWith(user.id!!)) {
-            throw ForbiddenException(user.id, "Todo", todo.id)
+            throw NotPermittedException(user.id, "Todo", todo.id!!)
         }
 
         return todo
@@ -146,7 +146,7 @@ class TodoServiceImpl(
         val user = userRepository.findById(userId) ?: throw ModelNotFoundException("User", userId)
 
         if (!comment.matchUserIdWith(user.id!!)) {
-            throw ForbiddenException(user.id, "Comment", comment.id)
+            throw NotPermittedException(user.id, "Comment", comment.id!!)
         }
 
         return comment
