@@ -8,13 +8,22 @@ class TodoRedisRepository(
     private val redisTemplate: RedisTemplate<String, String>
 ) {
 
-    fun saveVisitedTodo(userId: String, todoId: String) {
+    private val recentlyVisitedSize: Long = 5
 
-        redisTemplate.opsForList().leftPush(userId, todoId)
+    fun saveVisitedTodo(userId: Long, todoId: Long) {
 
-        if (redisTemplate.opsForList().size(userId)!! > 5) {
-            redisTemplate.opsForList().rightPop(userId)
+        val key = userId.toString()
+        redisTemplate.opsForList().leftPush(key, todoId.toString())
+
+        if (redisTemplate.opsForList().size(key)!! > recentlyVisitedSize) {
+            redisTemplate.opsForList().rightPop(key)
         }
+    }
+
+    fun getVisitedTodoIdList(userId: Long): List<Long>? {
+
+        return redisTemplate.opsForList().range(userId.toString(), 0, recentlyVisitedSize)
+            ?.map { it.toLong() }
     }
 
 }

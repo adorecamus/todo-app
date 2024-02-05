@@ -45,6 +45,15 @@ class TodoController(
             .body(todoService.getTodoList(sort, writer))
     }
 
+    @GetMapping("/visited")
+    fun getVisitedTodoList(
+        @AuthenticationPrincipal userPrincipal: UserPrincipal
+    ): ResponseEntity<List<TodoResponse>> {
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(todoService.getVisitedTodoList(userPrincipal.id))
+    }
+
     @GetMapping("/{todoId}")
     fun getTodo(
         @PathVariable todoId: Long,

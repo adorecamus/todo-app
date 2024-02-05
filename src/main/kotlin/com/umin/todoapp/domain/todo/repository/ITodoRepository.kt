@@ -8,6 +8,8 @@ interface ITodoRepository {
 
     fun getTodoList(sort: String?, writer: String?): List<Todo>
 
+    fun getTodoListByIds(ids: List<Long>?): List<Todo>
+
     fun findById(id: Long): Todo?
 
     fun delete(todo: Todo)
