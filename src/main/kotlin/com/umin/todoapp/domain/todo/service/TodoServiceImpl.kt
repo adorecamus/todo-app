@@ -5,10 +5,8 @@ import com.umin.todoapp.domain.comment.dto.CommentResponse
 import com.umin.todoapp.domain.comment.model.Comment
 import com.umin.todoapp.domain.comment.repository.ICommentRepository
 import com.umin.todoapp.domain.exception.NotPermittedException
-import com.umin.todoapp.domain.todo.dto.TodoRequest
-import com.umin.todoapp.domain.todo.dto.TodoResponse
 import com.umin.todoapp.domain.exception.ModelNotFoundException
-import com.umin.todoapp.domain.todo.dto.TodoWithCommentsResponse
+import com.umin.todoapp.domain.todo.dto.*
 import com.umin.todoapp.domain.todo.model.Todo
 import com.umin.todoapp.domain.todo.repository.ITodoRepository
 import com.umin.todoapp.domain.todo.repository.TodoRedisRepository
@@ -41,6 +39,16 @@ class TodoServiceImpl(
 
         return todoRepository.getTodoList(sort, writer)
             .map { TodoWithCommentsResponse.from(it) }
+    }
+
+    override fun getPaginatedTodoList(
+        pageNumber: Int,
+        pageSize: Int,
+        sort: String?,
+        request: TodoSearchRequest
+    ): TodoPageResponse {
+
+        return todoRepository.getPaginatedTodoList(pageNumber, pageSize, sort, request)
     }
 
     override fun getVisitedTodoList(userId: Long): List<TodoResponse> {

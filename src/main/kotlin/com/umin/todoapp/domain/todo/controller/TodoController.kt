@@ -1,8 +1,6 @@
 package com.umin.todoapp.domain.todo.controller
 
-import com.umin.todoapp.domain.todo.dto.TodoRequest
-import com.umin.todoapp.domain.todo.dto.TodoResponse
-import com.umin.todoapp.domain.todo.dto.TodoWithCommentsResponse
+import com.umin.todoapp.domain.todo.dto.*
 import com.umin.todoapp.domain.todo.service.TodoService
 import com.umin.todoapp.infra.security.UserPrincipal
 import org.springframework.http.HttpStatus
@@ -43,6 +41,18 @@ class TodoController(
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(todoService.getTodoList(sort, writer))
+    }
+
+    @GetMapping("/page")
+    fun getPaginatedTodoList(
+        @RequestParam(defaultValue = "1") pageNumber: Int,
+        @RequestParam(defaultValue = "5") pageSize: Int,
+        @RequestParam(required = false) sort: String?,
+        request: TodoSearchRequest
+    ): ResponseEntity<TodoPageResponse> {
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(todoService.getPaginatedTodoList(pageNumber, pageSize, sort, request))
     }
 
     @GetMapping("/visited")
