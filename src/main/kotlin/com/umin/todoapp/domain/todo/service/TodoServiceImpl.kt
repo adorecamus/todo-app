@@ -53,9 +53,11 @@ class TodoServiceImpl(
 
     override fun getVisitedTodoList(userId: Long): List<TodoResponse>? {
 
-        return todoRedisRepository.getVisitedTodoIdList(userId)
-            ?.map { todoId -> todoRepository.findById(todoId) ?: throw ModelNotFoundException("Todo", todoId) }
-            ?.map { TodoResponse.from(it) }
+        return todoRedisRepository.getVisitedTodoIdList(userId)?.let { todoIds ->
+            val todoList = todoRepository.getTodoListByIds(todoIds).map { TodoResponse.from(it) }
+
+            todoIds.map { todoId -> todoList.first { it.id == todoId } }
+        }
     }
 
     override fun getTodoById(todoId: Long, userId: Long): TodoWithCommentsResponse {
