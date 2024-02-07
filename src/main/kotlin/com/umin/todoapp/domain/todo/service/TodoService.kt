@@ -16,7 +16,7 @@ interface TodoService {
         request: TodoSearchRequest
     ): TodoPageResponse
 
-    fun getVisitedTodoList(userId: Long): List<TodoResponse>
+    fun getVisitedTodoList(userId: Long): List<TodoResponse>?
 
     fun getTodoById(todoId: Long, userId: Long): TodoWithCommentsResponse
 

@@ -13,7 +13,10 @@ class TodoRedisRepository(
     fun saveVisitedTodo(userId: Long, todoId: Long) {
 
         val key = userId.toString()
-        redisTemplate.opsForList().leftPush(key, todoId.toString())
+        val value = todoId.toString()
+
+        redisTemplate.opsForList().remove(key, 0, value)
+        redisTemplate.opsForList().leftPush(key, value)
 
         if (redisTemplate.opsForList().size(key)!! > recentlyVisitedSize) {
             redisTemplate.opsForList().rightPop(key)
@@ -22,7 +25,7 @@ class TodoRedisRepository(
 
     fun getVisitedTodoIdList(userId: Long): List<Long>? {
 
-        return redisTemplate.opsForList().range(userId.toString(), 0, recentlyVisitedSize)
+        return redisTemplate.opsForList().range(userId.toString(), 0, -1)
             ?.map { it.toLong() }
     }
 

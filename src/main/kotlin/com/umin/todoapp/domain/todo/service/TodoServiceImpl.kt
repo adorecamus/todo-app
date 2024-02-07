@@ -51,11 +51,11 @@ class TodoServiceImpl(
         return todoRepository.getPaginatedTodoList(pageNumber, pageSize, sort, request)
     }
 
-    override fun getVisitedTodoList(userId: Long): List<TodoResponse> {
+    override fun getVisitedTodoList(userId: Long): List<TodoResponse>? {
 
-        return todoRedisRepository.getVisitedTodoIdList(userId).let { ids ->
-            todoRepository.getTodoListByIds(ids).map { TodoResponse.from(it) }
-        }
+        return todoRedisRepository.getVisitedTodoIdList(userId)
+            ?.map { todoId -> todoRepository.findById(todoId) ?: throw ModelNotFoundException("Todo", todoId) }
+            ?.map { TodoResponse.from(it) }
     }
 
     override fun getTodoById(todoId: Long, userId: Long): TodoWithCommentsResponse {
