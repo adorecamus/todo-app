@@ -51,10 +51,12 @@ class TodoServiceImpl(
         return todoRepository.getPaginatedTodoList(pageNumber, pageSize, sort, request)
     }
 
-    override fun getVisitedTodoList(userId: Long): List<TodoResponse> {
+    override fun getVisitedTodoList(userId: Long): List<TodoResponse>? {
 
-        return todoRedisRepository.getVisitedTodoIdList(userId).let { ids ->
-            todoRepository.getTodoListByIds(ids).map { TodoResponse.from(it) }
+        return todoRedisRepository.getVisitedTodoIdList(userId)?.let { todoIds ->
+            val todoList = todoRepository.getTodoListByIds(todoIds).map { TodoResponse.from(it) }
+
+            todoIds.map { todoId -> todoList.first { it.id == todoId } }
         }
     }
 
