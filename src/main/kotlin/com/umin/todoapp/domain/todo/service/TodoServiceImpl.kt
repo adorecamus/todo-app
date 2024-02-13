@@ -45,7 +45,7 @@ class TodoServiceImpl(
         pageNumber: Int,
         pageSize: Int,
         sort: String?,
-        request: TodoSearchRequest
+        request: TodoSearchRequest?
     ): TodoPageResponse {
 
         return todoRepository.getPaginatedTodoList(pageNumber, pageSize, sort, request)

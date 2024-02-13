@@ -13,7 +13,7 @@ interface TodoService {
         pageNumber: Int,
         pageSize: Int,
         sort: String?,
-        request: TodoSearchRequest
+        request: TodoSearchRequest?
     ): TodoPageResponse
 
     fun getVisitedTodoList(userId: Long): List<TodoResponse>?

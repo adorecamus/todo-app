@@ -10,7 +10,7 @@ interface ITodoRepository {
 
     fun getTodoList(sort: String?, writer: String?): List<Todo>
 
-    fun getPaginatedTodoList(pageNumber: Int, pageSize: Int, sort: String?, request: TodoSearchRequest): TodoPageResponse
+    fun getPaginatedTodoList(pageNumber: Int, pageSize: Int, sort: String?, request: TodoSearchRequest?): TodoPageResponse
 
     fun getTodoListByIds(ids: List<Long>?): List<Todo>
 
