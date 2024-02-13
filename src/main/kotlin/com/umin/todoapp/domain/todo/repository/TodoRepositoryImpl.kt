@@ -43,12 +43,12 @@ class TodoRepositoryImpl(
         return query.fetch()
     }
 
-    override fun getPaginatedTodoList(pageNumber: Int, pageSize: Int, sort: String?, request: TodoSearchRequest): TodoPageResponse {
+    override fun getPaginatedTodoList(pageNumber: Int, pageSize: Int, sort: String?, request: TodoSearchRequest?): TodoPageResponse {
 
         val query = queryFactory.select(todo)
             .from(todo)
             .leftJoin(todo.user, user).fetchJoin()
-            .where(allCondition(request))
+            .where(request?.let { allCondition(it) })
 
         val totalPages = ceil(query.fetch().size / pageSize.toDouble()).toInt()
 

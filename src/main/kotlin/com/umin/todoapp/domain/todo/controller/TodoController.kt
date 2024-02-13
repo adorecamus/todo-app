@@ -48,7 +48,7 @@ class TodoController(
         @RequestParam(defaultValue = "1") pageNumber: Int,
         @RequestParam(defaultValue = "5") pageSize: Int,
         @RequestParam(required = false) sort: String?,
-        request: TodoSearchRequest
+        request: TodoSearchRequest?
     ): ResponseEntity<TodoPageResponse> {
         return ResponseEntity
             .status(HttpStatus.OK)
