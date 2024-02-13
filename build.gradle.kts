@@ -41,6 +41,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("io.jsonwebtoken:jjwt-api:0.12.3")
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
+    implementation("software.amazon.awssdk:s3:2.24.0")
     implementation("com.querydsl:querydsl-jpa:$queryDslVersion:jakarta")
     kapt("com.querydsl:querydsl-apt:$queryDslVersion:jakarta")
 

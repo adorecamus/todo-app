@@ -24,12 +24,9 @@ class SecurityConfig(
             .csrf { it.disable() }
             .authorizeHttpRequests {
                 it.requestMatchers(
-                    "/signup",
-                    "/login",
-                    "/swagger-ui/**",
-                    "/v3/api-docs/**",
-                ).permitAll()
-                    .anyRequest().authenticated()
+                    "/api/**"
+                ).authenticated()
+                    .anyRequest().permitAll()
             }
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
             .exceptionHandling {
